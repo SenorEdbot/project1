@@ -87,3 +87,10 @@ html, body {
 #target {
     width: 345px;
 }
+#directions-panel {
+    margin-top: 10px;
+    background-color: #FFEE77;
+    padding: 10px;
+    overflow: scroll;
+    height: 174px;
+  }
