@@ -12,7 +12,7 @@ $("#submit").on("click", function(event) {
 
     var destForecast = $("#pac-input2").val().trim();
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
-    "q=" + destForecast + "&appid=" + OpenWeatherAPIKey;
+    "q=" + destForecast + "&units=imperial&appid=" + OpenWeatherAPIKey;
 
     
 
@@ -29,17 +29,26 @@ $("#submit").on("click", function(event) {
             
             
             for (i = 0; i < results.length; i=i+8) {
-                var forecastPanelCard = $("<div class='card' style='width: 18rem;'>");
+                var cardColumn = $("<div class='col-lg-2'>");
+                var forecastPanelCard = $("<div class='card' style='width: 12rem;'>");
                 var forecastCardhead = $("<h2 class='card-header'>").text(destForecast);
+                var forecastImg = $("<img>");
                 var cardBody = $("<div class='card-body'>");
+                
                 var forecastTemp = results[i].main.temp;
                 var forecastTempP = $("<p class='card-text'>").text("Temp: " + forecastTemp);
-
+                var forecastSky = results[i].weather[0].description;
+                var forecastSkyP = $("<p class='card-text'>").text("Sky: " + forecastSky);
+                forecastImg.attr("src", "http://openweathermap.org/img/w/" + results[i].weather[0].icon + ".png");
+                
                 cardBody.append(forecastTempP);
+                cardBody.append(forecastSkyP);
+                cardBody.append(forecastImg);
                 forecastPanelCard.append(forecastCardhead, cardBody);
+                cardColumn.append(forecastPanelCard);
 
 
-                $("#forecast-panel").prepend(forecastPanelCard);
+                $("#forecast-panel").append(cardColumn);
             }
             
         });
