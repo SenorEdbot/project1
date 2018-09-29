@@ -8,6 +8,8 @@ var OpenWeatherAPIKey = "e4080c0ab10ee56dbfeb23db4f5570f5";
 var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
     "q=Bujumbura,Burundi&units=imperial&appid=" + OpenWeatherAPIKey;
 
+var tripMilage;
+
 // Here we run our AJAX call to the OpenWeatherMap API
 $.ajax({
     url: queryURL,
@@ -26,13 +28,20 @@ $.ajax({
 
 function initAutocomplete() {
     var directionsService = new google.maps.DirectionsService;
-    var directionsDisplay = new google.maps.DirectionsRenderer;
+    var directionsDisplay = new google.maps.DirectionsRenderer({
+        draggable: true,
+        map: map
+    })
     var map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 39.015697, lng: -94.565559 },
         zoom: 10,
         mapTypeId: 'roadmap'
     });
     directionsDisplay.setMap(map);
+
+    // directionsDisplay.addListener('directions_changed', function() {
+    //     calculateAndDisplayRoute(directionsService, directionsDisplay);
+    //   });
 
     document.getElementById('submit').addEventListener('click', function () {
         calculateAndDisplayRoute(directionsService, directionsDisplay);
@@ -41,31 +50,19 @@ function initAutocomplete() {
     // Create the search box and link it to the UI element.
     var input = document.getElementById('pac-input');
     var searchBox = new google.maps.places.SearchBox(input);
-    //map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
+    
+    // Create the search box and link it to the UI element.
+    var input2 = document.getElementById('pac-input2');
+    var searchBox2 = new google.maps.places.SearchBox(input2);
+    
+    // Create the search box and link it to the UI element.
+    var input3 = document.getElementById('pac-input3');
+    var searchBox3 = new google.maps.places.SearchBox(input3);
 
     // Bias the SearchBox results towards current map's viewport.
     map.addListener('bounds_changed', function () {
         searchBox.setBounds(map.getBounds());
-    });
-
-    // Create the search box and link it to the UI element.
-    var input2 = document.getElementById('pac-input2');
-    var searchBox2 = new google.maps.places.SearchBox(input2);
-    //map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input2);
-
-    // Bias the SearchBox results towards current map's viewport.
-    map.addListener('bounds_changed', function () {
         searchBox2.setBounds(map.getBounds());
-    });
-
-    // Create the search box and link it to the UI element.
-    var input3 = document.getElementById('pac-input3');
-    var searchBox3 = new google.maps.places.SearchBox(input3);
-    //map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input2);
-
-    // Bias the SearchBox results towards current map's viewport.
-    map.addListener('bounds_changed', function () {
         searchBox3.setBounds(map.getBounds());
     });
 }
@@ -81,15 +78,6 @@ $('#addStop').on('click', function(){
     $('#pac-input3').val('');
 })
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-    //var checkboxArray = document.getElementById('waypoints');
-    // for (var i = 0; i < checkboxArray.length; i++) {
-    //   if (checkboxArray.options[i].selected) {
-    //     waypts.push({
-    //       location: checkboxArray[i].value,
-    //       stopover: true
-    //     });
-    //   }
-    // }
     directionsService.route({
         origin: document.getElementById('pac-input').value,
         destination: document.getElementById('pac-input2').value,
@@ -103,6 +91,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
             var summaryPanel = document.getElementById('directions-panel');
             summaryPanel.innerHTML = '';
             // For each route, display summary information.
+            summaryPanel.innerHTML += '<b> Total Trip Milage:</b> ' + computeTotalDistance(directionsDisplay.getDirections()) + ' Miles<br>';
             for (var i = 0; i < route.legs.length; i++) {
                 var routeSegment = i + 1;
                 summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
@@ -116,3 +105,15 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
         }
     });
 }
+
+function computeTotalDistance(result) {
+    var total = 0;
+    var myroute = result.routes[0];
+    for (var i = 0; i < myroute.legs.length; i++) {
+      total += myroute.legs[i].distance.value;
+    }
+    total = (total / 1000) * 0.621371;
+    tripMilage = total;
+    $('#testing').text("Total Trip Milage: " + total + " Miles");
+    return total
+  }
