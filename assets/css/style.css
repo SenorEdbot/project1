@@ -104,3 +104,9 @@ html, body {
     overflow: scroll;
     height: 174px;
   }
+
+
+#forecast-panel img {
+    height: 50px;
+    width: 50px;
+}
