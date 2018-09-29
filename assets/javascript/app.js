@@ -4,24 +4,48 @@ var GMapsAPIKey = "AIzaSyDwoapQMiuQh-V8VL7c9GZ09jMcILHLs_Y";
 //Alex's API Key
 var OpenWeatherAPIKey = "e4080c0ab10ee56dbfeb23db4f5570f5";
 
-// Here we are building the URL we need to query the database
-var queryURL = "https://api.openweathermap.org/data/2.5/weather?" +
-    "q=Bujumbura,Burundi&units=imperial&appid=" + OpenWeatherAPIKey;
+
 
 // Here we run our AJAX call to the OpenWeatherMap API
-$.ajax({
-    url: queryURL,
-    method: "GET"
+$("#submit").on("click", function(event) {
+    event.preventDefault();
+
+    var destForecast = $("#pac-input2").val().trim();
+    var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
+    "q=" + destForecast + "&appid=" + OpenWeatherAPIKey;
+
+    
+
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    })
+        // We store all of the retrieved data inside of an object called "response"
+        .then(function (response) {
+            var results = response.list;
+        
+            console.log(results);
+            
+            
+            
+            for (i = 0; i < results.length; i=i+8) {
+                var forecastPanelCard = $("<div class='card' style='width: 18rem;'>");
+                var forecastCardhead = $("<h2 class='card-header'>").text(destForecast);
+                var cardBody = $("<div class='card-body'>");
+                var forecastTemp = results[i].main.temp;
+                var forecastTempP = $("<p class='card-text'>").text("Temp: " + forecastTemp);
+
+                cardBody.append(forecastTempP);
+                forecastPanelCard.append(forecastCardhead, cardBody);
+
+
+                $("#forecast-panel").prepend(forecastPanelCard);
+            }
+            
+        });
+
 })
-    // We store all of the retrieved data inside of an object called "response"
-    .then(function (response) {
 
-        // Log the queryURL
-        console.log(queryURL);
-
-        // Log the resulting object
-        console.log(response);
-    });
 
 function initAutocomplete() {
     var directionsService = new google.maps.DirectionsService;
@@ -35,6 +59,10 @@ function initAutocomplete() {
 
     document.getElementById('submit').addEventListener('click', function() {
         calculateAndDisplayRoute(directionsService, directionsDisplay);
+
+    
+
+
     });
 
     // Create the search box and link it to the UI element.
