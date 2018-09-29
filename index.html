@@ -13,10 +13,17 @@
     <div class="jumbotron text-center mb-1">
         <h1 class="display-4">Open Roaders</h1>
     </div>
-    <input type="submit" id="submit">
-    <input id="pac-input" class="controls" type="text" placeholder="Search Box">
-    <input id="pac-input2" class="controls" type="text" placeholder="Search Box">
+    <div id="row">
+        <input id="pac-input" class="controls" type="text" placeholder="Starting Location">
+        <input id="pac-input2" class="controls" type="text" placeholder="Ending Location">
+        <input id="pac-input3" class="controls" type="text" placeholder="Additional">
+        <button id="addStop">Add Stop</button>
+    </div>
+    <div class="row m-3">        
+        <input type="submit" id="submit">
+    </div>
     <div id="map"></div>
+    <div id="testing"></div>
     <div id="directions-panel"></div>
     
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwoapQMiuQh-V8VL7c9GZ09jMcILHLs_Y&libraries=places&callback=initAutocomplete" async defer></script>
