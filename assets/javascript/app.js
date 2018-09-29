@@ -11,10 +11,12 @@ var tripMilage;
 // Here we run our AJAX call to the OpenWeatherMap API
 $("#submit").on("click", function(event) {
     event.preventDefault();
+    $("#forecast-panel").empty();
 
-    var destForecast = $("#pac-input2").val().trim();
+    var destArr = $("#pac-input2").val().trim().split(",");
+    var destForecast = destArr[0].trim() +", "+destArr[1].trim();
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
-    "q=" + destForecast + "&units=imperial&appid=" + OpenWeatherAPIKey;
+    "q=" + destForecast + ",us&units=imperial&appid=" + OpenWeatherAPIKey;
 
     
 
@@ -72,16 +74,12 @@ function initAutocomplete() {
     });
     directionsDisplay.setMap(map);
 
-    // directionsDisplay.addListener('directions_changed', function() {
-    //     calculateAndDisplayRoute(directionsService, directionsDisplay);
-    //   });
+     directionsDisplay.addListener('directions_changed', function() {
+        computeTotalDistance(directionsDisplay.getDirections());
+       });
 
     document.getElementById('submit').addEventListener('click', function () {
         calculateAndDisplayRoute(directionsService, directionsDisplay);
-
-    
-
-
     });
 
     // Create the search box and link it to the UI element.
@@ -151,6 +149,6 @@ function computeTotalDistance(result) {
     }
     total = (total / 1000) * 0.621371;
     tripMilage = total;
-    $('#testing').text("Total Trip Milage: " + total + " Miles");
+    $('#mileage-panel').text("Total Trip Milage: " + tripMilage + " Miles");
     return total
   }
