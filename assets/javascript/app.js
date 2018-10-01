@@ -14,19 +14,16 @@ $("#submit").on("click", function(event) {
 
     var destForecast = $("#pac-input2").val().trim();
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
-    "q=" + destForecast + "&units=imperial&appid=" + OpenWeatherAPIKey;
+    "q=" + destForecast + ",us&units=imperial&appid=" + OpenWeatherAPIKey;
 
-    
-
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
-        // We store all of the retrieved data inside of an object called "response"
-        .then(function (response) {
-            var results = response.list;
-        
-            console.log(results);
+      
+    axios.get(queryURL)
+    // We store all of the retrieved data inside of an object called "response"
+    .then(function (response) {
+        console.log(queryURL);
+                var results = response.data.list;
+            
+                console.log(results);
             
             
             
