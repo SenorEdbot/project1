@@ -17,18 +17,15 @@ $("#submit").on("click", function(event) {
     var destForecast = destArr[0].trim() +", "+destArr[1].trim();
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
     "q=" + destForecast + ",us&units=imperial&appid=" + OpenWeatherAPIKey;
+      
+    axios.get(queryURL)
+    // We store all of the retrieved data inside of an object called "response"
+    .then(function (response) {
+        console.log(queryURL);
+                var results = response.data.list;
+            
+                console.log(results);
 
-    
-
-    $.ajax({
-        url: queryURL,
-        method: "GET"
-    })
-        // We store all of the retrieved data inside of an object called "response"
-        .then(function (response) {
-            var results = response.list;
-        
-            console.log(results);
             
             
             
