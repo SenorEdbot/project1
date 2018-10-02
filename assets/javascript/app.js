@@ -73,6 +73,16 @@ function initAutocomplete() {
 
      directionsDisplay.addListener('directions_changed', function() {
         computeTotalDistance(directionsDisplay.getDirections());
+        var place = autocomplete1.getPlace();
+        var fromLat = place.geometry.location.lat();
+        var fromLng = place.geometry.location.lng();
+        console.log(fromLat);
+        console.log(fromLng);
+        var place = autocomplete2.getPlace();
+        var toLat = place.geometry.location.lat();
+        var toLng = place.geometry.location.lng();
+        console.log(toLat);
+        console.log(toLng);
        });
 
     document.getElementById('submit').addEventListener('click', function () {
@@ -80,24 +90,50 @@ function initAutocomplete() {
     });
 
     // Create the search box and link it to the UI element.
-    var input = document.getElementById('pac-input');
-    var searchBox = new google.maps.places.SearchBox(input);
+    var autocomplete1 = new google.maps.places.Autocomplete(document.getElementById('pac-input'));
+    google.maps.event.addListener(autocomplete1, 'place_changed', function(){
+        var place = autocomplete1.getPlace();
+        var fromLat = place.geometry.location.lat();
+        var fromLng = place.geometry.location.lng();
+        console.log(fromLat);
+        console.log(fromLng);
+    })
     
     // Create the search box and link it to the UI element.
-    var input2 = document.getElementById('pac-input2');
-    var searchBox2 = new google.maps.places.SearchBox(input2);
+    var autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('pac-input2'));
+    google.maps.event.addListener(autocomplete2, 'place_changed', function(){
+        var place = autocomplete2.getPlace();
+        var toLat = place.geometry.location.lat();
+        var toLng = place.geometry.location.lng();
+        console.log(toLat);
+        console.log(toLng);
+    })
     
     // Create the search box and link it to the UI element.
-    var input3 = document.getElementById('pac-input3');
-    var searchBox3 = new google.maps.places.SearchBox(input3);
+    var autocomplete3 = new google.maps.places.Autocomplete(document.getElementById('pac-input3'));
+    google.maps.event.addListener(autocomplete3, 'place_changed', function(){
+        var place = autocomplete3.getPlace();
+        var waypointLat = place.geometry.location.lat();
+        var waypointLng = place.geometry.location.lng();
+        console.log(waypointLat);
+        console.log(waypointLng);
+    })
 
     // Bias the SearchBox results towards current map's viewport.
     map.addListener('bounds_changed', function () {
-        searchBox.setBounds(map.getBounds());
-        searchBox2.setBounds(map.getBounds());
-        searchBox3.setBounds(map.getBounds());
+        autocomplete1.setBounds(map.getBounds());
+        autocomplete2.setBounds(map.getBounds());
+        autocomplete3.setBounds(map.getBounds());
     });
 }
+// function initAutocomplete() {
+//     var autocomplete1 = new google.maps.places.Autocomplete(document.getElementById('pac-input'));
+//     google.maps.event.addListener(autocomplete1, 'place_changed', function(){
+//         var place = autocomplete1.getPlace();
+//         var lattitude = place.geometry.location.lat();
+//         console.log(lattitude);
+//     })
+// }
 var waypts = [];
 $('#addStop').on('click', function(){
     event.preventDefault;
