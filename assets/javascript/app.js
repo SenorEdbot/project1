@@ -17,6 +17,7 @@ $("#submit").on("click", function(event) {
     var destForecast = destArr[0].trim() +", "+destArr[1].trim();
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
     "q=" + destForecast + ",us&units=imperial&appid=" + OpenWeatherAPIKey;
+     
       
     axios.get(queryURL)
     // We store all of the retrieved data inside of an object called "response"
@@ -35,9 +36,9 @@ $("#submit").on("click", function(event) {
                 var forecastCardhead = $("<h2 class='card-header'>").text(destForecast);
                 var forecastImg = $("<img>");
                 var cardBody = $("<div class='card-body'>");
-                
+               
                 var forecastTemp = results[i].main.temp;
-                var forecastTempP = $("<p class='card-text'>").text("Temp: " + forecastTemp);
+                var forecastTempP = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp) + "\xB0");
                 var forecastSky = results[i].weather[0].description;
                 var forecastSkyP = $("<p class='card-text'>").text("Sky: " + forecastSky);
                 forecastImg.attr("src", "http://openweathermap.org/img/w/" + results[i].weather[0].icon + ".png");
@@ -60,6 +61,7 @@ $("#submit").on("click", function(event) {
 
 function initAutocomplete() {
     var directionsService = new google.maps.DirectionsService;
+    // var geocoder = new google.maps.Geocoder;
     var directionsDisplay = new google.maps.DirectionsRenderer({
         draggable: true,
         map: map
