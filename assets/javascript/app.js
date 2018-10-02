@@ -110,14 +110,14 @@ function initAutocomplete() {
     })
     
     // Create the search box and link it to the UI element.
-    var autocomplete3 = new google.maps.places.Autocomplete(document.getElementById('pac-input3'));
-    google.maps.event.addListener(autocomplete3, 'place_changed', function(){
-        var place = autocomplete3.getPlace();
-        var waypointLat = place.geometry.location.lat();
-        var waypointLng = place.geometry.location.lng();
-        console.log(waypointLat);
-        console.log(waypointLng);
-    })
+    // var autocomplete3 = new google.maps.places.Autocomplete(document.getElementById('pac-input3'));
+    // google.maps.event.addListener(autocomplete3, 'place_changed', function(){
+    //     var place = autocomplete3.getPlace();
+    //     var waypointLat = place.geometry.location.lat();
+    //     var waypointLng = place.geometry.location.lng();
+    //     console.log(waypointLat);
+    //     console.log(waypointLng);
+    // })
 
     // Bias the SearchBox results towards current map's viewport.
     map.addListener('bounds_changed', function () {
