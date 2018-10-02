@@ -38,7 +38,7 @@ $("#submit").on("click", function(event) {
                 var cardBody = $("<div class='card-body'>");
                
                 var forecastTemp = results[i].main.temp;
-                var forecastTempP = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp) + "\xB0";
+                var forecastTempP = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp) + "\xB0");
                 var forecastSky = results[i].weather[0].description;
                 var forecastSkyP = $("<p class='card-text'>").text("Sky: " + forecastSky);
                 forecastImg.attr("src", "http://openweathermap.org/img/w/" + results[i].weather[0].icon + ".png");
