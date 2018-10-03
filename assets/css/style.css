@@ -113,4 +113,8 @@ html, body {
 #vehiclesRow {
     margin-left: 5px;
     margin-top: 5px;
+    margin-right: 0px;
+}
+#directions-panel {
+    display: none;
 }

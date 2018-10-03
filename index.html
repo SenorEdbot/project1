@@ -14,15 +14,17 @@
         <h1 class="display-4">Open Roaders</h1>
     </div>
     <div id="row">
+        <h3>Please fill out your trip details below</h3>
         <input id="pac-input" class="controls" type="text" placeholder="Starting Address">
         <input id="pac-input2" class="controls" type="text" placeholder="Destination City">
         <input id="pac-input3" class="controls" type="text" placeholder="Additional Stops">
         <button id="addStop">Add Stop</button>
     </div>
     <div class="row" id="vehiclesRow">
-        <img class="vehicles" src="assets/images/smallCar2.jpg" alt="Small Car" id="smallCar">
-        <img class="vehicles" src="assets/images/truck2.jpg" alt="Truck" id="truck">
-        <img class="vehicles" src="assets/images/smallSUV2.jpg" alt="Small SUV" id="smallSUV">
+        <h4>Select your vehicle:</h4>
+        <img class="vehicles" avgMPG="35" src="assets/images/smallCar2.jpg" alt="Small Car" id="car">
+        <img class="vehicles" avgMPG="19" src="assets/images/truck2.jpg" alt="Truck" id="truck">
+        <img class="vehicles" avgMPG="25" src="assets/images/smallSUV2.jpg" alt="Small SUV" id="suv">
     </div>
     <div class="row m-3">        
         <input type="submit" id="submit">
@@ -35,10 +37,15 @@
             </div>
             <div class="row" id="forecastRow1"></div>
             <div class="row" id="forecastRow2"></div>
-        </di2>
+        </div>
+        <div id="mileage-panel">
+            <p>Total Miles: <span id="milesSpan"></span> miles.</p>
+            <p>Total Time: <span id="timeSpan"></span>.</p>
+            <p>Total Fuel Cost: $<span id="fuelSpan"></span>.</p>
+        </div>
     </div>
-    <div id="mileage-panel"></div>
-    <div id="directions-panel"></div>
+    <div id="directions-panel">
+    </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDwoapQMiuQh-V8VL7c9GZ09jMcILHLs_Y&libraries=places&callback=initAutocomplete" async defer></script>
