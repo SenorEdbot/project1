@@ -8,52 +8,127 @@ var OpenWeatherAPIKey = "e4080c0ab10ee56dbfeb23db4f5570f5";
 
 var tripMilage;
 
+var fromLat;
+var fromLng;
+var toLng;
+var toLng;
+
 // Here we run our AJAX call to the OpenWeatherMap API
 $("#submit").on("click", function(event) {
     event.preventDefault();
-    $("#forecast-panel").empty();
+    $("#forecastRow1").empty();
+    $("#forecastRow2").empty();
 
+    var fromArr = $("#pac-input").val().trim().split(",");
+    var fromForecast = fromArr[0].trim() +", "+fromArr[1].trim();
+    
     var destArr = $("#pac-input2").val().trim().split(",");
     var destForecast = destArr[0].trim() +", "+destArr[1].trim();
+    // var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
+    // "q=" + destForecast + ",us&units=imperial&appid=" + OpenWeatherAPIKey;
+
+    // https://api.openweathermap.org/data/2.5/weather?lat=41.8781136&lon=-87.62979819999998&units=imperial&appid=e4080c0ab10ee56dbfeb23db4f5570f5
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
-    "q=" + destForecast + ",us&units=imperial&appid=" + OpenWeatherAPIKey;
-     
-      
-    axios.get(queryURL)
-    // We store all of the retrieved data inside of an object called "response"
-    .then(function (response) {
-        console.log(queryURL);
-                var results = response.data.list;
-            
-                console.log(results);
+    "lat=" + toLat + "&lon=" + toLng + "&units=imperial&appid=" + OpenWeatherAPIKey;
+    var queryURL2 = "https://api.openweathermap.org/data/2.5/forecast?" +
+    "lat=" + fromLat + "&lon=" + fromLng + "&units=imperial&appid=" + OpenWeatherAPIKey;
+    
+    console.log(toLat);
+    console.log(toLng);
+    
+    function getToURL(){
+        return axios.get(queryURL);
+    }
+    function getFromURL(){
+        return axios.get(queryURL2);
+    }
+    axios.all([getToURL(), getFromURL()])
+    .then(axios.spread(function(to, from){
+        var results = to.data.list;
+        var results2 = from.data.list;
+        console.log(results, results2);
 
-            
-            
-            
-            for (i = 0; i < results.length; i=i+8) {
-                var cardColumn = $("<div class='col-lg-2'>");
-                var forecastPanelCard = $("<div class='card' style='width: 12rem;'>");
-                var forecastCardhead = $("<h2 class='card-header'>").text(destForecast);
-                var forecastImg = $("<img>");
-                var cardBody = $("<div class='card-body'>");
-               
-                var forecastTemp = results[i].main.temp;
-                var forecastTempP = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp) + "\xB0");
-                var forecastSky = results[i].weather[0].description;
-                var forecastSkyP = $("<p class='card-text'>").text("Sky: " + forecastSky);
-                forecastImg.attr("src", "http://openweathermap.org/img/w/" + results[i].weather[0].icon + ".png");
-                
-                cardBody.append(forecastTempP);
-                cardBody.append(forecastSkyP);
-                cardBody.append(forecastImg);
-                forecastPanelCard.append(forecastCardhead, cardBody);
-                cardColumn.append(forecastPanelCard);
-
-
-                $("#forecast-panel").append(cardColumn);
+            for (i = 0; i < results2.length; i = i + 8) {
+                var cardColumn2 = $("<div class='col-lg-2'>");
+                var forecastPanelCard2 = $("<div class='card' style='width: 12rem;'>");
+                var forecastCardhead2 = $("<h2 class='card-header'>").text(fromForecast);
+                var forecastImg2 = $("<img>");
+                var cardBody2 = $("<div class='card-body'>");
+    
+                var forecastTemp2 = results2[i].main.temp;
+                var forecastTempP2 = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp2) + "\xB0");
+                var forecastSky2 = results2[i].weather[0].description;
+                var forecastSkyP2 = $("<p class='card-text'>").text("Sky: " + forecastSky2);
+                forecastImg2.attr("src", "http://openweathermap.org/img/w/" + results2[i].weather[0].icon + ".png");
+    
+                cardBody2.append(forecastTempP2);
+                cardBody2.append(forecastSkyP2);
+                cardBody2.append(forecastImg2);
+                forecastPanelCard2.append(forecastCardhead2, cardBody2);
+                cardColumn2.append(forecastPanelCard2);
+    
+    
+                $("#forecastRow1").append(cardColumn2);
             }
+
+        for (i = 0; i < results.length; i = i + 8) {
+            var cardColumn = $("<div class='col-lg-2'>");
+            var forecastPanelCard = $("<div class='card' style='width: 12rem;'>");
+            var forecastCardhead = $("<h2 class='card-header'>").text(destForecast);
+            var forecastImg = $("<img>");
+            var cardBody = $("<div class='card-body'>");
+
+            var forecastTemp = results[i].main.temp;
+            var forecastTempP = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp) + "\xB0");
+            var forecastSky = results[i].weather[0].description;
+            var forecastSkyP = $("<p class='card-text'>").text("Sky: " + forecastSky);
+            forecastImg.attr("src", "http://openweathermap.org/img/w/" + results[i].weather[0].icon + ".png");
+
+            cardBody.append(forecastTempP);
+            cardBody.append(forecastSkyP);
+            cardBody.append(forecastImg);
+            forecastPanelCard.append(forecastCardhead, cardBody);
+            cardColumn.append(forecastPanelCard);
+
+            $("#forecastRow2").append(cardColumn);
+
+
+        }
+    }))
+    // axios.get(queryURL)
+    // // We store all of the retrieved data inside of an object called "response"
+    // .then(function (response) {
+    //     console.log(queryURL);
+    //             var results = response.data.list;
             
-        });
+    //             console.log(results);
+            
+    //         for (i = 0; i < results.length; i=i+8) {
+    //             var cardColumn = $("<div class='col-lg-2'>");
+    //             var forecastPanelCard = $("<div class='card' style='width: 12rem;'>");
+    //             var forecastCardhead = $("<h2 class='card-header'>").text(destForecast);
+    //             var forecastImg = $("<img>");
+    //             var cardBody = $("<div class='card-body'>");
+               
+    //             var forecastTemp = results[i].main.temp;
+    //             var forecastTempP = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp) + "\xB0");
+    //             var forecastSky = results[i].weather[0].description;
+    //             var forecastSkyP = $("<p class='card-text'>").text("Sky: " + forecastSky);
+    //             forecastImg.attr("src", "http://openweathermap.org/img/w/" + results[i].weather[0].icon + ".png");
+                
+    //             cardBody.append(forecastTempP);
+    //             cardBody.append(forecastSkyP);
+    //             cardBody.append(forecastImg);
+    //             forecastPanelCard.append(forecastCardhead, cardBody);
+    //             cardColumn.append(forecastPanelCard);
+
+
+    //             $("#forecast-panel").append(cardColumn);
+    //         }
+            
+            
+    //     });
+        
 
 })
 
@@ -76,13 +151,13 @@ function initAutocomplete() {
      directionsDisplay.addListener('directions_changed', function() {
         computeTotalDistance(directionsDisplay.getDirections());
         var place = autocomplete1.getPlace();
-        var fromLat = place.geometry.location.lat();
-        var fromLng = place.geometry.location.lng();
+        fromLat = place.geometry.location.lat();
+        fromLng = place.geometry.location.lng();
         console.log(fromLat);
         console.log(fromLng);
         var place = autocomplete2.getPlace();
-        var toLat = place.geometry.location.lat();
-        var toLng = place.geometry.location.lng();
+        toLat = place.geometry.location.lat();
+        toLng = place.geometry.location.lng();
         console.log(toLat);
         console.log(toLng);
        });
@@ -95,8 +170,8 @@ function initAutocomplete() {
     var autocomplete1 = new google.maps.places.Autocomplete(document.getElementById('pac-input'));
     google.maps.event.addListener(autocomplete1, 'place_changed', function(){
         var place = autocomplete1.getPlace();
-        var fromLat = place.geometry.location.lat();
-        var fromLng = place.geometry.location.lng();
+        fromLat = place.geometry.location.lat();
+        fromLng = place.geometry.location.lng();
         console.log(fromLat);
         console.log(fromLng);
     })
@@ -105,21 +180,21 @@ function initAutocomplete() {
     var autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('pac-input2'));
     google.maps.event.addListener(autocomplete2, 'place_changed', function(){
         var place = autocomplete2.getPlace();
-        var toLat = place.geometry.location.lat();
-        var toLng = place.geometry.location.lng();
+        toLat = place.geometry.location.lat();
+        toLng = place.geometry.location.lng();
         console.log(toLat);
         console.log(toLng);
     })
     
     // Create the search box and link it to the UI element.
-    // var autocomplete3 = new google.maps.places.Autocomplete(document.getElementById('pac-input3'));
-    // google.maps.event.addListener(autocomplete3, 'place_changed', function(){
-    //     var place = autocomplete3.getPlace();
-    //     var waypointLat = place.geometry.location.lat();
-    //     var waypointLng = place.geometry.location.lng();
-    //     console.log(waypointLat);
-    //     console.log(waypointLng);
-    // })
+    var autocomplete3 = new google.maps.places.Autocomplete(document.getElementById('pac-input3'));
+    google.maps.event.addListener(autocomplete3, 'place_changed', function(){
+        var place = autocomplete3.getPlace();
+        var waypointLat = place.geometry.location.lat();
+        var waypointLng = place.geometry.location.lng();
+        console.log(waypointLat);
+        console.log(waypointLng);
+    })
 
     // Bias the SearchBox results towards current map's viewport.
     map.addListener('bounds_changed', function () {
