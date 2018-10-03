@@ -105,7 +105,6 @@ html, body {
     height: 174px;
   }
 
-
 #forecast-panel img {
     height: 50px;
     width: 50px;
@@ -113,6 +112,10 @@ html, body {
 #vehiclesRow {
     margin-left: 5px;
     margin-top: 5px;
+    margin-right: 0px;
+}
+#directions-panel {
+    display: none;
 }
 
 .jumbotron {
@@ -121,7 +124,6 @@ html, body {
     background-position: center;
     background-size: cover;
     color: white;
-        
 }
 
 .forecast-header {

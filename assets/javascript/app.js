@@ -4,12 +4,19 @@ var GMapsAPIKey = "AIzaSyDwoapQMiuQh-V8VL7c9GZ09jMcILHLs_Y";
 //Alex's API Key
 var OpenWeatherAPIKey = "e4080c0ab10ee56dbfeb23db4f5570f5";
 
+
 // declaring some global variables
-var tripMilage;
 var fromLat;
 var fromLng;
 var toLng;
 var toLng;
+var tripMilage = 0;
+var secondsTotal = 0;
+var finalTime;
+var avgMPG =35;
+var gasPrice = 2.88;
+var tripGasCost;
+
 
 // calls the OpenWeather API for 5 day forecast of destination and starting point and appends to the page
 $("#submit").on("click", function(event) {
@@ -21,24 +28,23 @@ $("#submit").on("click", function(event) {
     var fromForecast = fromArr[0].trim() +", "+fromArr[1].trim();
     var destArr = $("#pac-input2").val().trim().split(",");
     var destForecast = destArr[0].trim() +", "+destArr[1].trim();
-    
+
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
-    "lat=" + toLat + "&lon=" + toLng + "&units=imperial&appid=" + OpenWeatherAPIKey;
+        "lat=" + toLat + "&lon=" + toLng + "&units=imperial&appid=" + OpenWeatherAPIKey;
     var queryURL2 = "https://api.openweathermap.org/data/2.5/forecast?" +
-    "lat=" + fromLat + "&lon=" + fromLng + "&units=imperial&appid=" + OpenWeatherAPIKey;
+        "lat=" + fromLat + "&lon=" + fromLng + "&units=imperial&appid=" + OpenWeatherAPIKey;
 
     // using Axios return both "To" and "From" queryURLs
     function getToURL(){
         return axios.get(queryURL);
     }
-    function getFromURL(){
+    function getFromURL() {
         return axios.get(queryURL2);
     }
     axios.all([getToURL(), getFromURL()])
-    .then(axios.spread(function(to, from){
-        var results = to.data.list;
-        var results2 = from.data.list;
-        console.log(results, results2);
+        .then(axios.spread(function (to, from) {
+            var results = to.data.list;
+            var results2 = from.data.list;
 
         // 5 day forecast returns an object with a length of 40. 40/5 = 8
         // for loop uses every 8th item to generate a boostrap Card with that day's forecast
@@ -77,15 +83,17 @@ $("#submit").on("click", function(event) {
             var forecastSkyP = $("<p class='card-text'>").text("Sky: " + forecastSky);
             forecastImg.attr("src", "http://openweathermap.org/img/w/" + results[i].weather[0].icon + ".png");
 
-            cardBody.append(forecastTempP);
-            cardBody.append(forecastSkyP);
-            cardBody.append(forecastImg);
-            forecastPanelCard.append(forecastCardhead, cardBody);
-            cardColumn.append(forecastPanelCard);
 
-            $("#forecastRow2").append(cardColumn);
-        }
-    }))
+
+                cardBody.append(forecastTempP);
+                cardBody.append(forecastSkyP);
+                cardBody.append(forecastImg);
+                forecastPanelCard.append(forecastCardhead, cardBody);
+                cardColumn.append(forecastPanelCard);
+
+                $("#forecastRow2").append(cardColumn);
+            }
+        }))
 })
 
 
@@ -104,19 +112,9 @@ function initAutocomplete() {
     });
     directionsDisplay.setMap(map);
 
-     directionsDisplay.addListener('directions_changed', function() {
+    directionsDisplay.addListener('directions_changed', function () {
         computeTotalDistance(directionsDisplay.getDirections());
-        var place = autocomplete1.getPlace();
-        fromLat = place.geometry.location.lat();
-        fromLng = place.geometry.location.lng();
-        console.log(fromLat);
-        console.log(fromLng);
-        var place = autocomplete2.getPlace();
-        toLat = place.geometry.location.lat();
-        toLng = place.geometry.location.lng();
-        console.log(toLat);
-        console.log(toLng);
-       });
+    });
 
     document.getElementById('submit').addEventListener('click', function () {
         calculateAndDisplayRoute(directionsService, directionsDisplay);
@@ -124,33 +122,22 @@ function initAutocomplete() {
 
     // Create the search box and link it to the UI element.
     var autocomplete1 = new google.maps.places.Autocomplete(document.getElementById('pac-input'));
-    google.maps.event.addListener(autocomplete1, 'place_changed', function(){
+    google.maps.event.addListener(autocomplete1, 'place_changed', function () {
         var place = autocomplete1.getPlace();
         fromLat = place.geometry.location.lat();
         fromLng = place.geometry.location.lng();
-        console.log(fromLat);
-        console.log(fromLng);
     })
-    
+
     // Create the search box and link it to the UI element.
     var autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('pac-input2'));
-    google.maps.event.addListener(autocomplete2, 'place_changed', function(){
+    google.maps.event.addListener(autocomplete2, 'place_changed', function () {
         var place = autocomplete2.getPlace();
         toLat = place.geometry.location.lat();
         toLng = place.geometry.location.lng();
-        console.log(toLat);
-        console.log(toLng);
     })
-    
+
     // Create the search box and link it to the UI element.
     var autocomplete3 = new google.maps.places.Autocomplete(document.getElementById('pac-input3'));
-    google.maps.event.addListener(autocomplete3, 'place_changed', function(){
-        var place = autocomplete3.getPlace();
-        var waypointLat = place.geometry.location.lat();
-        var waypointLng = place.geometry.location.lng();
-        console.log(waypointLat);
-        console.log(waypointLng);
-    })
 
     // Bias the SearchBox results towards current map's viewport.
     map.addListener('bounds_changed', function () {
@@ -159,16 +146,8 @@ function initAutocomplete() {
         autocomplete3.setBounds(map.getBounds());
     });
 }
-// function initAutocomplete() {
-//     var autocomplete1 = new google.maps.places.Autocomplete(document.getElementById('pac-input'));
-//     google.maps.event.addListener(autocomplete1, 'place_changed', function(){
-//         var place = autocomplete1.getPlace();
-//         var lattitude = place.geometry.location.lat();
-//         console.log(lattitude);
-//     })
-// }
 var waypts = [];
-$('#addStop').on('click', function(){
+$('#addStop').on('click', function () {
     event.preventDefault;
     console.log('button was clicked')
     var newWaypt = $('#pac-input3').val().trim();
@@ -192,7 +171,7 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
             var summaryPanel = document.getElementById('directions-panel');
             summaryPanel.innerHTML = '';
             // For each route, display summary information.
-            summaryPanel.innerHTML += '<b> Total Trip Milage:</b> ' + computeTotalDistance(directionsDisplay.getDirections()) + ' Miles<br>';
+            //summaryPanel.innerHTML += '<b> Total Trip Milage:</b> ' + computeTotalDistance(directionsDisplay.getDirections()) + ' Miles<br>';
             for (var i = 0; i < route.legs.length; i++) {
                 var routeSegment = i + 1;
                 summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
@@ -208,13 +187,61 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
 }
 
 function computeTotalDistance(result) {
-    var total = 0;
+    tripMilage = 0;
+    secondsTotal = 0;
+    tripGasCost = 0;
     var myroute = result.routes[0];
+    $('#car').css('border', '3px solid green'); 
+    console.log(myroute);
     for (var i = 0; i < myroute.legs.length; i++) {
-      total += myroute.legs[i].distance.value;
+        tripMilage += myroute.legs[i].distance.value;
+        secondsTotal += myroute.legs[i].duration.value;
     }
-    total = (total / 1000) * 0.621371;
-    tripMilage = total;
-    $('#mileage-panel').text("Total Trip Milage: " + tripMilage + " Miles");
-    return total
-  }
+    tripMilage = ((tripMilage / 1000) * 0.621371).toFixed(2);
+    tripGasCost = ((tripMilage / avgMPG) * gasPrice).toFixed(2);
+    $('#fuelSpan').text(tripGasCost);
+    $('#milesSpan').text(tripMilage);
+    $('#timeSpan').text(getTime(secondsTotal));
+}
+function getTime(seconds) {
+    //the amount of seconds we have left
+    var leftover = seconds;
+
+    //how many full days fits in the amount of leftover seconds
+    var days = Math.floor(leftover / 86400);
+
+    //how many seconds are left
+    leftover = leftover - (days * 86400);
+
+    //how many full hours fits in the amount of leftover seconds
+    var hours = Math.floor(leftover / 3600);
+
+    //how many seconds are left
+    leftover = leftover - (hours * 3600);
+
+    //how many minutes fits in the amount of leftover seconds
+    var minutes = Math.ceil(leftover / 60);
+
+    leftover = leftover - (minutes * 60);
+
+    finalTime = days + ' Day ' + hours + ' Hours ' + minutes + ' Minutes';
+    return finalTime
+}
+$(document).on('click', '.vehicles', function() {
+    if ($(this).attr('id') === 'car') {
+        //if a car is pushed
+        avgMPG = parseInt($(this).attr('avgMPG'));
+        $('.vehicles').css('border', '0px');
+        $(this).css('border', '3px solid green'); 
+    } else if ($(this).attr('id') === 'truck') {
+        //if a truck is pushed
+        avgMPG = parseInt($(this).attr('avgMPG'));
+        $('.vehicles').css('border', '0px');
+        $(this).css('border', '3px solid green');  
+    } else if ($(this).attr('id')=== 'suv') {
+        //if a suv is pushed
+        avgMPG = parseInt($(this).attr('avgMPG'));
+        $('.vehicles').css('border', '0px');
+        $(this).css('border', '3px solid green'); 
+    }
+})
