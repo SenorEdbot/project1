@@ -5,8 +5,7 @@ var GMapsAPIKey = "AIzaSyDwoapQMiuQh-V8VL7c9GZ09jMcILHLs_Y";
 var OpenWeatherAPIKey = "e4080c0ab10ee56dbfeb23db4f5570f5";
 
 
-
-
+// declaring some global variables
 var fromLat;
 var fromLng;
 var toLng;
@@ -18,30 +17,25 @@ var avgMPG =35;
 var gasPrice = 2.88;
 var tripGasCost;
 
-// Here we run our AJAX call to the OpenWeatherMap API
-$("#submit").on("click", function (event) {
+
+// calls the OpenWeather API for 5 day forecast of destination and starting point and appends to the page
+$("#submit").on("click", function(event) {
     event.preventDefault();
     $("#forecastRow1").empty();
     $("#forecastRow2").empty();
 
     var fromArr = $("#pac-input").val().trim().split(",");
-    var fromForecast = fromArr[0].trim() + ", " + fromArr[1].trim();
-
+    var fromForecast = fromArr[0].trim() +", "+fromArr[1].trim();
     var destArr = $("#pac-input2").val().trim().split(",");
-    var destForecast = destArr[0].trim() + ", " + destArr[1].trim();
-    // var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
-    // "q=" + destForecast + ",us&units=imperial&appid=" + OpenWeatherAPIKey;
+    var destForecast = destArr[0].trim() +", "+destArr[1].trim();
 
-    // https://api.openweathermap.org/data/2.5/weather?lat=41.8781136&lon=-87.62979819999998&units=imperial&appid=e4080c0ab10ee56dbfeb23db4f5570f5
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?" +
         "lat=" + toLat + "&lon=" + toLng + "&units=imperial&appid=" + OpenWeatherAPIKey;
     var queryURL2 = "https://api.openweathermap.org/data/2.5/forecast?" +
         "lat=" + fromLat + "&lon=" + fromLng + "&units=imperial&appid=" + OpenWeatherAPIKey;
 
-    console.log(toLat);
-    console.log(toLng);
-
-    function getToURL() {
+    // using Axios return both "To" and "From" queryURLs
+    function getToURL(){
         return axios.get(queryURL);
     }
     function getFromURL() {
@@ -52,41 +46,44 @@ $("#submit").on("click", function (event) {
             var results = to.data.list;
             var results2 = from.data.list;
 
-            for (i = 0; i < results2.length; i = i + 8) {
-                var cardColumn2 = $("<div class='col-lg-2'>");
-                var forecastPanelCard2 = $("<div class='card' style='width: 12rem;'>");
-                var forecastCardhead2 = $("<h2 class='card-header'>").text(fromForecast);
-                var forecastImg2 = $("<img>");
-                var cardBody2 = $("<div class='card-body'>");
+        // 5 day forecast returns an object with a length of 40. 40/5 = 8
+        // for loop uses every 8th item to generate a boostrap Card with that day's forecast
+        for (i = 0; i < results2.length; i = i + 8) {
+            var cardColumn2 = $("<div class='col-lg-2'>");
+            var forecastPanelCard2 = $("<div class='card' style='width: 13rem;'>");
+            var forecastCardhead2 = $("<h2 class='card-header from-header'>").text(fromForecast);
+            var forecastImg2 = $("<img>");
+            var cardBody2 = $("<div class='card-body card-square2 text-center'>");
 
-                var forecastTemp2 = results2[i].main.temp;
-                var forecastTempP2 = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp2) + "\xB0");
-                var forecastSky2 = results2[i].weather[0].description;
-                var forecastSkyP2 = $("<p class='card-text'>").text("Sky: " + forecastSky2);
-                forecastImg2.attr("src", "http://openweathermap.org/img/w/" + results2[i].weather[0].icon + ".png");
+            var forecastTemp2 = results2[i].main.temp;
+            var forecastTempP2 = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp2) + "\xB0");
+            var forecastSky2 = results2[i].weather[0].description;
+            var forecastSkyP2 = $("<p class='card-text'>").text("Sky: " + forecastSky2);
+            forecastImg2.attr("src", "http://openweathermap.org/img/w/" + results2[i].weather[0].icon + ".png");
 
-                cardBody2.append(forecastTempP2);
-                cardBody2.append(forecastSkyP2);
-                cardBody2.append(forecastImg2);
-                forecastPanelCard2.append(forecastCardhead2, cardBody2);
-                cardColumn2.append(forecastPanelCard2);
+            cardBody2.append(forecastTempP2);
+            cardBody2.append(forecastSkyP2);
+            cardBody2.append(forecastImg2);
+            forecastPanelCard2.append(forecastCardhead2, cardBody2);
+            cardColumn2.append(forecastPanelCard2);
+
+            $("#forecastRow1").append(cardColumn2);
+        }
+        // similar for loop as above but for the destination instead of the starting point
+        for (i = 0; i < results.length; i = i + 8) {
+            var cardColumn = $("<div class='col-lg-2'>");
+            var forecastPanelCard = $("<div class='card' style='width: 13rem;'>");
+            var forecastCardhead = $("<h2 class='card-header to-header'>").text(destForecast);
+            var forecastImg = $("<img>");
+            var cardBody = $("<div class='card-body card-square text-center'>");
+
+            var forecastTemp = results[i].main.temp;
+            var forecastTempP = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp) + "\xB0");
+            var forecastSky = results[i].weather[0].description;
+            var forecastSkyP = $("<p class='card-text'>").text("Sky: " + forecastSky);
+            forecastImg.attr("src", "http://openweathermap.org/img/w/" + results[i].weather[0].icon + ".png");
 
 
-                $("#forecastRow1").append(cardColumn2);
-            }
-
-            for (i = 0; i < results.length; i = i + 8) {
-                var cardColumn = $("<div class='col-lg-2'>");
-                var forecastPanelCard = $("<div class='card' style='width: 12rem;'>");
-                var forecastCardhead = $("<h2 class='card-header'>").text(destForecast);
-                var forecastImg = $("<img>");
-                var cardBody = $("<div class='card-body'>");
-
-                var forecastTemp = results[i].main.temp;
-                var forecastTempP = $("<p class='card-text'>").text("Temp: " + Math.round(forecastTemp) + "\xB0");
-                var forecastSky = results[i].weather[0].description;
-                var forecastSkyP = $("<p class='card-text'>").text("Sky: " + forecastSky);
-                forecastImg.attr("src", "http://openweathermap.org/img/w/" + results[i].weather[0].icon + ".png");
 
                 cardBody.append(forecastTempP);
                 cardBody.append(forecastSkyP);
@@ -95,8 +92,6 @@ $("#submit").on("click", function (event) {
                 cardColumn.append(forecastPanelCard);
 
                 $("#forecastRow2").append(cardColumn);
-
-
             }
         }))
 })

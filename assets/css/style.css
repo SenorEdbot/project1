@@ -105,7 +105,6 @@ html, body {
     height: 174px;
   }
 
-
 #forecast-panel img {
     height: 50px;
     width: 50px;
@@ -117,4 +116,40 @@ html, body {
 }
 #directions-panel {
     display: none;
+}
+
+.jumbotron {
+    background-image: url("../images/openroad.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    color: white;
+}
+
+.forecast-header {
+    font-size: 2rem;
+    color: blue;
+}
+#forecastRow1{
+    margin: 20px;
+}
+#forecastRow2{
+    margin: 20px;
+}
+
+.to-header {
+    background-color: #95d680;
+}
+
+.from-header {
+    background-color: #a6a6a6;
+}
+
+.card-square2 {
+    background-color: #e6e6e6;
+    font-weight: bold;
+}
+
+.card-square {
+    background-color: #eff9eb;
 }
