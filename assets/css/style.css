@@ -167,3 +167,7 @@ html, body {
 #tripTable {
     display:none;
 }
+
+body {
+    background-image: url("../images/bktexture1.jpg")
+}
