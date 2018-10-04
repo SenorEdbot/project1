@@ -17,10 +17,15 @@ var avgMPG =35;
 var gasPrice = 2.88;
 var tripGasCost;
 
+var counter = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+
 
 // calls the OpenWeather API for 5 day forecast of destination and starting point and appends to the page
 $("#submit").on("click", function(event) {
     event.preventDefault();
+    if ( !$('#pac-input').val() && !$('#pac-input2').val()) {
+        return false
+    }
     $("#forecastRow1").empty();
     $("#forecastRow2").empty();
 
@@ -113,6 +118,9 @@ function initAutocomplete() {
     directionsDisplay.setMap(map);
 
     directionsDisplay.addListener('directions_changed', function () {
+        if ( !$('#pac-input') && !$('#pac-input2')) {
+            return false
+        }
         computeTotalDistance(directionsDisplay.getDirections());
     });
 
@@ -149,6 +157,11 @@ function initAutocomplete() {
 var waypts = [];
 $('#addStop').on('click', function () {
     event.preventDefault;
+    if (!$('#pac-input3').val()) {
+        return false
+    }
+    var addstopsDiv = document.getElementById('addStops');
+    addstopsDiv.innerHTML = '';
     console.log('button was clicked')
     var newWaypt = $('#pac-input3').val().trim();
     waypts.push({
@@ -156,6 +169,11 @@ $('#addStop').on('click', function () {
         stopover: true
     });
     $('#pac-input3').val('');
+    if(waypts.length > -1 ){
+        for (var i=0; i<waypts.length; i++){
+            addstopsDiv.innerHTML += "Waypoint #" + counter[i] + ": " + waypts[i].location + "<br>";
+        }
+    }
 })
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
     directionsService.route({
@@ -191,7 +209,7 @@ function computeTotalDistance(result) {
     secondsTotal = 0;
     tripGasCost = 0;
     var myroute = result.routes[0];
-    $('#car').css('border', '3px solid green'); 
+    //$('#car').css('border', '3px solid green'); 
     console.log(myroute);
     for (var i = 0; i < myroute.legs.length; i++) {
         tripMilage += myroute.legs[i].distance.value;

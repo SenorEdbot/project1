@@ -13,21 +13,48 @@
     <div class="jumbotron text-center mb-1">
         <h1 class="display-4">Open Roaders</h1>
     </div>
-    <div id="row">
-        <h3>Please fill out your trip details below</h3>
-        <input id="pac-input" class="controls" type="text" placeholder="Starting Address">
-        <input id="pac-input2" class="controls" type="text" placeholder="Destination City">
-        <input id="pac-input3" class="controls" type="text" placeholder="Additional Stops">
-        <button id="addStop">Add Stop</button>
-    </div>
-    <div class="row" id="vehiclesRow">
-        <h4>Select your vehicle:</h4>
-        <img class="vehicles" avgMPG="35" src="assets/images/smallCar2.jpg" alt="Small Car" id="car">
-        <img class="vehicles" avgMPG="19" src="assets/images/truck2.jpg" alt="Truck" id="truck">
-        <img class="vehicles" avgMPG="25" src="assets/images/smallSUV2.jpg" alt="Small SUV" id="suv">
-    </div>
-    <div class="row m-3">        
-        <input type="submit" id="submit">
+    <div class="container">
+        <div id="row">
+            <h3 class="text-center">Please fill out your trip details below</h3>
+            <div class="col col-lg-2">
+                <div class="row">
+            
+                    <label>Trip Start: </label>
+                    <input id="pac-input" class="controls" type="text" placeholder="Starting Address">
+                </div>
+                <div class="row">
+                    <label>Destination: </label>
+                    <input id="pac-input2" class="controls" type="text" placeholder="Destination City">
+            
+                </div>
+                <div class="row">
+            
+                    <label>Additional Stops: </label>
+                    <input id="pac-input3" class="controls" type="text" placeholder="Additional Stops">
+                </div>
+            </div>
+            <div class="col col-lg-10">
+                <div class="row">            
+                </div>
+                <div class="row">            
+                </div>
+                <div class="row">
+                    <button id="addStop">Add Stop</button>            
+                </div>
+            </div>
+            <div id="addStops"></div>
+        </div>
+        <div class="row">
+            <h4>Select your Vehicle:</h4>
+        </div>
+        <div class="row" id="vehiclesRow">
+            <img class="vehicles" avgMPG="35" src="assets/images/smallCar2.jpg" alt="Small Car" id="car">
+            <img class="vehicles" avgMPG="19" src="assets/images/truck2.jpg" alt="Truck" id="truck">
+            <img class="vehicles" avgMPG="25" src="assets/images/smallSUV2.jpg" alt="Small SUV" id="suv">
+        </div>
+        <div class="row m-3">
+            <input type="submit" id="submit">
+        </div>
     </div>
     <div id="map"></div>
     <div class="container">

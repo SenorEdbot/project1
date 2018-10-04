@@ -153,3 +153,14 @@ html, body {
 .card-square {
     background-color: #eff9eb;
 }
+#submit {
+    margin: 0 auto;
+}
+.controls {
+    margin-bottom: 10px;
+}
+#addStop {
+    margin-top: 5px;
+    margin-left: 1%;
+    margin-bottom: 10px;
+}
