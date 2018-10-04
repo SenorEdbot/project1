@@ -17,10 +17,15 @@ var avgMPG =35;
 var gasPrice = 2.88;
 var tripGasCost;
 
+var counter = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+
 
 // calls the OpenWeather API for 5 day forecast of destination and starting point and appends to the page
 $("#submit").on("click", function(event) {
     event.preventDefault();
+    if ( !$('#pac-input').val() && !$('#pac-input2').val()) {
+        return false
+    }
     $("#forecastRow1").empty();
     $("#forecastRow2").empty();
 
@@ -113,6 +118,9 @@ function initAutocomplete() {
     directionsDisplay.setMap(map);
 
     directionsDisplay.addListener('directions_changed', function () {
+        if ( !$('#pac-input') && !$('#pac-input2')) {
+            return false
+        }
         computeTotalDistance(directionsDisplay.getDirections());
     });
 
@@ -149,6 +157,11 @@ function initAutocomplete() {
 var waypts = [];
 $('#addStop').on('click', function () {
     event.preventDefault;
+    if (!$('#pac-input3').val()) {
+        return false
+    }
+    var addstopsDiv = document.getElementById('addStops');
+    addstopsDiv.innerHTML = '';
     console.log('button was clicked')
     var newWaypt = $('#pac-input3').val().trim();
     waypts.push({
@@ -156,6 +169,11 @@ $('#addStop').on('click', function () {
         stopover: true
     });
     $('#pac-input3').val('');
+    if(waypts.length > -1 ){
+        for (var i=0; i<waypts.length; i++){
+            addstopsDiv.innerHTML += "Waypoint #" + counter[i] + ": " + waypts[i].location + "<br>";
+        }
+    }
 })
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
     directionsService.route({
@@ -168,18 +186,6 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
         if (status === 'OK') {
             directionsDisplay.setDirections(response);
             var route = response.routes[0];
-            var summaryPanel = document.getElementById('directions-panel');
-            summaryPanel.innerHTML = '';
-            // For each route, display summary information.
-            //summaryPanel.innerHTML += '<b> Total Trip Milage:</b> ' + computeTotalDistance(directionsDisplay.getDirections()) + ' Miles<br>';
-            for (var i = 0; i < route.legs.length; i++) {
-                var routeSegment = i + 1;
-                summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
-                    '</b><br>';
-                summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
-                summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
-                summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
-            }
         } else {
             window.alert('Directions request failed due to ' + status);
         }
@@ -191,7 +197,7 @@ function computeTotalDistance(result) {
     secondsTotal = 0;
     tripGasCost = 0;
     var myroute = result.routes[0];
-    $('#car').css('border', '3px solid green'); 
+    //$('#car').css('border', '3px solid green'); 
     console.log(myroute);
     for (var i = 0; i < myroute.legs.length; i++) {
         tripMilage += myroute.legs[i].distance.value;
@@ -199,9 +205,14 @@ function computeTotalDistance(result) {
     }
     tripMilage = ((tripMilage / 1000) * 0.621371).toFixed(2);
     tripGasCost = ((tripMilage / avgMPG) * gasPrice).toFixed(2);
-    $('#fuelSpan').text(tripGasCost);
-    $('#milesSpan').text(tripMilage);
-    $('#timeSpan').text(getTime(secondsTotal));
+    // $('#fuelSpan').text(tripGasCost + ".");
+    // $('#milesSpan').text(tripMilage + " Miles.");
+    // $('#timeSpan').text(getTime(secondsTotal) + ".");
+
+    $('#tripTable').show();
+    $('#timeTable').text(getTime(secondsTotal) + ".");
+    $('#milesTable').text(tripMilage + " Miles.");
+    $('#fuelTable').text(tripGasCost + ".");
 }
 function getTime(seconds) {
     //the amount of seconds we have left
