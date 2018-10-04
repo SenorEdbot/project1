@@ -186,18 +186,6 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
         if (status === 'OK') {
             directionsDisplay.setDirections(response);
             var route = response.routes[0];
-            var summaryPanel = document.getElementById('directions-panel');
-            summaryPanel.innerHTML = '';
-            // For each route, display summary information.
-            //summaryPanel.innerHTML += '<b> Total Trip Milage:</b> ' + computeTotalDistance(directionsDisplay.getDirections()) + ' Miles<br>';
-            for (var i = 0; i < route.legs.length; i++) {
-                var routeSegment = i + 1;
-                summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
-                    '</b><br>';
-                summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
-                summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
-                summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
-            }
         } else {
             window.alert('Directions request failed due to ' + status);
         }
@@ -217,9 +205,14 @@ function computeTotalDistance(result) {
     }
     tripMilage = ((tripMilage / 1000) * 0.621371).toFixed(2);
     tripGasCost = ((tripMilage / avgMPG) * gasPrice).toFixed(2);
-    $('#fuelSpan').text(tripGasCost);
-    $('#milesSpan').text(tripMilage);
-    $('#timeSpan').text(getTime(secondsTotal));
+    // $('#fuelSpan').text(tripGasCost + ".");
+    // $('#milesSpan').text(tripMilage + " Miles.");
+    // $('#timeSpan').text(getTime(secondsTotal) + ".");
+
+    $('#tripTable').show();
+    $('#timeTable').text(getTime(secondsTotal) + ".");
+    $('#milesTable').text(tripMilage + " Miles.");
+    $('#fuelTable').text(tripGasCost + ".");
 }
 function getTime(seconds) {
     //the amount of seconds we have left

@@ -164,3 +164,6 @@ html, body {
     margin-left: 1%;
     margin-bottom: 10px;
 }
+#tripTable {
+    display:none;
+}

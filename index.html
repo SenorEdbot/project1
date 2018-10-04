@@ -58,6 +58,24 @@
     </div>
     <div id="map"></div>
     <div class="container">
+        <div id="tripTableDiv">
+            <table class="table" id="tripTable">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Miles</th>
+                        <th>Fuel Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="timeTable"></td>
+                        <td id="milesTable"></td>
+                        <td id="fuelTable"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <div id="forecast-panel" class="row">
             <div class="col text-center forecast-header">
                 5 Day Weather Forecast:
@@ -65,13 +83,6 @@
             <div class="row" id="forecastRow1"></div>
             <div class="row" id="forecastRow2"></div>
         </div>
-
-        <div id="mileage-panel">
-            <p>Total Miles: <span id="milesSpan"></span> miles.</p>
-            <p>Total Time: <span id="timeSpan"></span>.</p>
-            <p>Total Fuel Cost: $<span id="fuelSpan"></span>.</p>
-        </div>
-    </div>
     <div id="directions-panel">
     </div>
     
