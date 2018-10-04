@@ -212,7 +212,7 @@ function computeTotalDistance(result) {
     $('#tripTable').show();
     $('#timeTable').text(getTime(secondsTotal) + ".");
     $('#milesTable').text(tripMilage + " Miles.");
-    $('#fuelTable').text(tripGasCost + ".");
+    $('#fuelTable').text("$" + tripGasCost + ".");
 }
 function getTime(seconds) {
     //the amount of seconds we have left
