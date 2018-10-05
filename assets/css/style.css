@@ -1,5 +1,6 @@
 #map {
     height: 70%;
+    display:none;
 }
 /* Optional: Makes the sample page fill the window. */
 html, body {
@@ -129,6 +130,7 @@ html, body {
 .forecast-header {
     font-size: 2rem;
     color: blue;
+    display:none;
 }
 #forecastRow1{
     margin: 20px;
