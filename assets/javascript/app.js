@@ -125,6 +125,8 @@ function initAutocomplete() {
     });
 
     document.getElementById('submit').addEventListener('click', function () {
+        $('#map').show();
+        $('.forecast-header').show()
         calculateAndDisplayRoute(directionsService, directionsDisplay);
     });
 
